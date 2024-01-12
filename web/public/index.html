@@ -40,15 +40,45 @@
         }
         .author-info {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 20px;
+            left: 20px;
             color: #333;
             text-align: left;
             font-size: 0.9em;
         }
         .author-info p {
-            margin: 5px 0;
+            margin: 20px 0;
         }
+        .label {
+            position: absolute;
+            padding: 5px 10px;
+            border: 1px solid #666;
+            border-radius: 50%; /* 圆形边框 */
+            background-color: #fff;
+            text-align: center;
+            user-select: none;
+            z-index: 100;
+            transform: translate(-50%, -50%); /* 使标签居中于指定位置 */
+        }
+        .tooltip {
+        visibility: hidden;
+        position: absolute;
+        background-color: black;
+        color: white;
+        text-align: center;
+        padding: 5px 10px; /* 增加水平填充以提高可读性 */
+        border-radius: 6px;
+        z-index: 200;
+        opacity: 0;
+        transition: opacity 0.3s;
+        max-width: 200px; /* 设置最大宽度 */
+        word-wrap: break-word; /* 允许在单词内断行 */
+        white-space: normal; /* 重置白空间处理 */
+    }
+    .node:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
     </style>
 </head>
 <body>
@@ -73,6 +103,16 @@
             newArrow.setAttribute('stroke-width', '2');
             newArrow.setAttribute('marker-end', 'url(#arrowhead)');
             svg.appendChild(newArrow);
+        }
+
+        function createLabel(edge, x, y, text) {
+            const label = document.createElement('div');
+            label.className = 'label';
+            label.id = 'label-' + edge.id; // 给每个标签一个独特的 ID
+            label.style.left = x + 'px';
+            label.style.top = y + 'px';
+            label.innerText = text;
+            document.body.appendChild(label);
         }
 
         function createMarker() {
@@ -109,7 +149,16 @@
                     node.id = 'node-' + nodeData.id;
                     node.style.left = nodeData.position.x + 'px';
                     node.style.top = nodeData.position.y + 'px';
+                   
+                    const label = document.createTextNode(nodeData.data.label);
+                    node.appendChild(label);
                     node.innerText = nodeData.data.label;
+                    
+                    const tooltip = document.createElement('span');
+                    tooltip.className = 'tooltip';
+                    tooltip.textContent = nodeData.data.note;
+                    node.appendChild(tooltip);
+                   
                     document.body.appendChild(node);
                     makeDraggable(node);
                 });
@@ -121,8 +170,11 @@
                     const y1 = sourceNode.offsetTop + sourceNode.offsetHeight / 2;
                     const x2 = targetNode.offsetLeft + targetNode.offsetWidth / 2;
                     const y2 = targetNode.offsetTop + targetNode.offsetHeight / 2;
+                    const midX = (x1 + x2) / 2;
+                    const midY = (y1 + y2) / 2;
                     createArrow('arrow-' + edge.id, x1, y1, x2, y2);
-                });
+                    createLabel(edge, midX, midY, edge.label);
+                })
             } catch (error) {
                 console.error(error);
             }
@@ -173,7 +225,8 @@
                     const sourceNode = document.getElementById('node-' + edge.source);
                     const targetNode = document.getElementById('node-' + edge.target);
                     const arrow = document.getElementById('arrow-' + edge.id);
-                    if (arrow) {
+                    const label = document.getElementById('label-' + edge.id); // 获取标签
+                    if (arrow && label) {
                         const x1 = sourceNode.offsetLeft + sourceNode.offsetWidth / 2;
                         const y1 = sourceNode.offsetTop + sourceNode.offsetHeight / 2;
                         const x2 = targetNode.offsetLeft + targetNode.offsetWidth / 2;
@@ -182,6 +235,10 @@
                         arrow.setAttribute('y1', y1);
                         arrow.setAttribute('x2', x2);
                         arrow.setAttribute('y2', y2);
+                        const midX = (x1 + x2) / 2;
+                        const midY = (y1 + y2) / 2;
+                        label.style.left = midX + 'px';
+                        label.style.top = midY + 'px';
                     }
                 }
             });
