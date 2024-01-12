@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mind Map with Directed Arrows</title>
+    <title>Mind Map with Directed Arrows</title>
+    <title>Mind Map with Directed Arrows</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #4f8aa575; /* 单色背景 */
+            margin: 0;
+            min-height: 100vh; /* 最小高度设置为视口高度 */
+            min-width: 100vw; /* 最小宽度设置为视口宽度 */
+            position: relative; /* 相对定位，以便于作者信息的绝对定位 */
+        }
+
+        .node {
+            position: absolute;
+            padding: 10px 15px;
+            border: 2px solid #2e86ab;
+            border-radius: 10px;
+            background-color: #f8f8fa;
+            cursor: grab;
+            user-select: none;
+            z-index: 100;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease;
+        }
+        .node:hover {
+            transform: scale(1.1);
+            z-index: 101;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .author-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #333;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        .author-info p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <svg width="100%" height="100%"></svg>
+    <div class="author-info">
+        <p>Автор: Ли Цзымин</p>
+        <p>Организация: Университет ИТМО</p>
+    </div>
+    <svg width="100%" height="100%"></svg>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const svg = document.querySelector('svg');
+
+        function createArrow(id, x1, y1, x2, y2) {
+            const newArrow = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            newArrow.setAttribute('id', id);
+            newArrow.setAttribute('x1', x1);
+            newArrow.setAttribute('y1', y1);
+            newArrow.setAttribute('x2', x2);
+            newArrow.setAttribute('y2', y2);
+            newArrow.setAttribute('stroke', 'black');
+            newArrow.setAttribute('stroke-width', '2');
+            newArrow.setAttribute('marker-end', 'url(#arrowhead)');
+            svg.appendChild(newArrow);
+        }
+
+        function createMarker() {
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            marker.setAttribute('id', 'arrowhead');
+            marker.setAttribute('markerWidth', '10');
+            marker.setAttribute('markerHeight', '7');
+            marker.setAttribute('refX', '10');
+            marker.setAttribute('refY', '3.5');
+            marker.setAttribute('orient', 'auto');
+            path.setAttribute('d', 'M 0 0 L 10 3.5 L 0 7');
+            path.setAttribute('fill', 'black');
+            marker.appendChild(path);
+            defs.appendChild(marker);
+            svg.appendChild(defs);
+        }
+
+        let edges = [];
+
+        window.onload = async function() {
+            createMarker();
+
+            try {
+                const response = await axios.get('/api/glossary');
+                const data = response.data;
+                const nodes = data.filter(item => !item.id.startsWith('e'));
+                edges = data.filter(item => item.id.startsWith('e'));
+
+                nodes.forEach(nodeData => {
+                    const node = document.createElement('div');
+                    node.className = 'node';
+                    node.id = 'node-' + nodeData.id;
+                    node.style.left = nodeData.position.x + 'px';
+                    node.style.top = nodeData.position.y + 'px';
+                    node.innerText = nodeData.data.label;
+                    document.body.appendChild(node);
+                    makeDraggable(node);
+                });
+
+                edges.forEach(edge => {
+                    const sourceNode = document.getElementById('node-' + edge.source);
+                    const targetNode = document.getElementById('node-' + edge.target);
+                    const x1 = sourceNode.offsetLeft + sourceNode.offsetWidth / 2;
+                    const y1 = sourceNode.offsetTop + sourceNode.offsetHeight / 2;
+                    const x2 = targetNode.offsetLeft + targetNode.offsetWidth / 2;
+                    const y2 = targetNode.offsetTop + targetNode.offsetHeight / 2;
+                    createArrow('arrow-' + edge.id, x1, y1, x2, y2);
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        function makeDraggable(node) {
+    node.onmousedown = function(event) {
+        // 修正拖动代码...
+        event.preventDefault();
+        let shiftX = event.clientX - node.getBoundingClientRect().left;
+        let shiftY = event.clientY - node.getBoundingClientRect().top;
+
+        node.style.cursor = 'grabbing';
+
+        function moveAt(pageX, pageY) {
+            node.style.left = pageX - shiftX + 'px';
+            node.style.top = pageY - shiftY + 'px';
+            updateArrows(node);
+        }
+
+        function onMouseMove(event) {
+            moveAt(event.pageX, event.pageY);
+        }
+
+        // 绑定到document确保即使鼠标离开元素也能正常工作
+        document.addEventListener('mousemove', onMouseMove);
+
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            node.onmouseup = null;
+            node.style.cursor = 'grab';
+        }
+
+        // 使用addEventListener确保能够正确移除监听器
+        document.addEventListener('mouseup', onMouseUp, { once: true });
+    };
+
+    node.ondragstart = function() {
+        return false;
+    };
+}
+
+
+        function updateArrows(node) {
+            const nodeId = node.id.replace('node-', '');
+            edges.forEach(edge => {
+                if (edge.source === nodeId || edge.target === nodeId) {
+                    const sourceNode = document.getElementById('node-' + edge.source);
+                    const targetNode = document.getElementById('node-' + edge.target);
+                    const arrow = document.getElementById('arrow-' + edge.id);
+                    if (arrow) {
+                        const x1 = sourceNode.offsetLeft + sourceNode.offsetWidth / 2;
+                        const y1 = sourceNode.offsetTop + sourceNode.offsetHeight / 2;
+                        const x2 = targetNode.offsetLeft + targetNode.offsetWidth / 2;
+                        const y2 = targetNode.offsetTop + targetNode.offsetHeight / 2;
+                        arrow.setAttribute('x1', x1);
+                        arrow.setAttribute('y1', y1);
+                        arrow.setAttribute('x2', x2);
+                        arrow.setAttribute('y2', y2);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
