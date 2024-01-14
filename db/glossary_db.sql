@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost_3306
+ Source Server         : my-mysql
  Source Server Type    : MySQL
  Source Server Version : 80032 (8.0.32)
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 14/01/2024 14:18:49
+ Date: 14/01/2024 20:25:35
 */
 
 SET NAMES utf8mb4;
@@ -59,16 +59,21 @@ CREATE TABLE `nodes`  (
 -- ----------------------------
 -- Records of nodes
 -- ----------------------------
-INSERT INTO `nodes` VALUES ('1', 'default', 'Term1', 'term1 note...', 250, 100);
-INSERT INTO `nodes` VALUES ('10', 'default', 'Term10', 'term10 note...', 250, 900);
-INSERT INTO `nodes` VALUES ('11', 'default', 'Term11', 'term11 note...', 250, 1000);
-INSERT INTO `nodes` VALUES ('2', 'default', 'Term2', 'term2 note...', 100, 200);
-INSERT INTO `nodes` VALUES ('3', 'default', 'Term3', 'term3 note...', 400, 200);
-INSERT INTO `nodes` VALUES ('4', 'default', 'Term4', 'term4 note...', 250, 300);
-INSERT INTO `nodes` VALUES ('5', 'default', 'Term5', 'term5 note...', 250, 400);
-INSERT INTO `nodes` VALUES ('6', 'default', 'Term6', 'term6 note...', 250, 500);
-INSERT INTO `nodes` VALUES ('7', 'default', 'Term7', 'term7 note...', 250, 600);
-INSERT INTO `nodes` VALUES ('8', 'default', 'Term8', 'term8 note...', 250, 700);
-INSERT INTO `nodes` VALUES ('9', 'default', 'Term9', 'term9 note...', 250, 800);
+INSERT INTO `nodes` VALUES ('1', 'default', '工业信息系统', 'term1 note...', 400, 100);
+INSERT INTO `nodes` VALUES ('10', 'default', '数据预测', NULL, 90, 650);
+INSERT INTO `nodes` VALUES ('11', 'default', '网络协议', NULL, 580, 210);
+INSERT INTO `nodes` VALUES ('12', 'default', '网络安全', NULL, 560, 270);
+INSERT INTO `nodes` VALUES ('13', 'default', '数据展示', NULL, 720, 350);
+INSERT INTO `nodes` VALUES ('14', 'default', '用户指令', NULL, 740, 450);
+INSERT INTO `nodes` VALUES ('15', 'default', '危险预警', NULL, 720, 550);
+INSERT INTO `nodes` VALUES ('2', 'default', '工业物联网', 'term2 note...', 300, 250);
+INSERT INTO `nodes` VALUES ('3', 'default', '服务器端', 'term3 note...', 200, 450);
+INSERT INTO `nodes` VALUES ('4', 'default', '用户端', 'term4 note...', 600, 450);
+INSERT INTO `nodes` VALUES ('5', 'default', '网络拓扑', 'term5 note...', 560, 150);
+INSERT INTO `nodes` VALUES ('6', 'default', '传感器', 'term6 note...', 100, 180);
+INSERT INTO `nodes` VALUES ('7', 'default', '数据存储', 'term7 note...', 50, 350);
+INSERT INTO `nodes` VALUES ('9', 'default', '数据分析', 'term9 note...', 50, 550);
+INSERT INTO `nodes` VALUES ('8', 'default', '数据处理', 'term8 note...', 30, 450);
+INSERT INTO `nodes` VALUES ('16', 'default', '数据采集', 'term9 note...', 80, 250);
 
 SET FOREIGN_KEY_CHECKS = 1;

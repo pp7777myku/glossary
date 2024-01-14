@@ -3,6 +3,8 @@ const mysql = require('mysql2');
 const app = express();
 const port = 9001;
 
+const delayTime = 1 * 30 * 1000;
+
 //connect to database
 const db = mysql.createConnection({
   host     : 'my-mysql',
