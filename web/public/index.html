@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Mind Map with Directed Arrows</title>
-    <title>Mind Map with Directed Arrows</title>
-    <title>Mind Map with Directed Arrows</title>
+    <title>Mind Map</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #4f8aa575; /* 单色背景 */
+            background-color: #4f8aa575;
             margin: 0;
             min-height: 100vh; /* 最小高度设置为视口高度 */
             min-width: 100vw; /* 最小宽度设置为视口宽度 */
@@ -38,17 +36,41 @@
             height: 100%;
             z-index: 1;
         }
-        .author-info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #333;
-            text-align: left;
-            font-size: 0.9em;
+        .source-code-button {
+            position: fixed; /* 与作者信息标签一样固定位置 */
+            top: 10px; /* 与顶部的距离与作者信息相同 */
+            right: calc(10px + 200px); /* 使按钮位于作者信息的左侧 */
+            background-color: #4f8aa5; /* 为按钮选择一个合适的背景色 */
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 103; /* 确保z-index高于其他元素 */
         }
-        .author-info p {
-            margin: 20px 0;
-        }
+
+.source-code-button a {
+    color: white; /* 链接的文字颜色 */
+    text-decoration: none; /* 去掉下划线 */
+    font-size: 0.8em;
+}
+
+.author-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    color: #333;
+    font-size: 0.8em;
+    text-align: right;
+}
+
+.author-info p {
+    margin: 5px 0;
+}
+
         .label {
             position: absolute;
             padding: 5px 10px;
@@ -79,170 +101,48 @@
         visibility: visible;
         opacity: 1;
     }
+    .button-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 102;
+}
+
+.button {
+    margin-right: 10px;
+    padding: 5px 15px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* 移除超链接的下划线 */
+}
+.source-code-button {
+    position: fixed;
+    top: 10px;
+    right: calc(10px + 200px);
+    z-index: 103; 
+}
     </style>
 </head>
 <body>
     <svg width="100%" height="100%"></svg>
+    <div class="button-container">
+        <a href="glossary.html" class="button">Table View (Glossary)</a>
+        <a href="index.html" class="button">Mind Map View</a>
+    </div>
+    <div class="source-code-button">
+        <a href="https://github.com/pp7777myku/glossary" target="_blank" class="btn">Codes (on Github)</a>
+    </div> 
     <div class="author-info">
         <p>Автор: Ли Цзымин</p>
-        <p>Организация: Университет ИТМО</p>
+        <p>Университет ИТМО</p>
     </div>
     <svg width="100%" height="100%"></svg>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        const svg = document.querySelector('svg');
+    <script src="index.js"></script>
 
-        function createArrow(id, x1, y1, x2, y2) {
-            const newArrow = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            newArrow.setAttribute('id', id);
-            newArrow.setAttribute('x1', x1);
-            newArrow.setAttribute('y1', y1);
-            newArrow.setAttribute('x2', x2);
-            newArrow.setAttribute('y2', y2);
-            newArrow.setAttribute('stroke', 'black');
-            newArrow.setAttribute('stroke-width', '2');
-            newArrow.setAttribute('marker-end', 'url(#arrowhead)');
-            svg.appendChild(newArrow);
-        }
-
-        function createLabel(edge, x, y, text) {
-            const label = document.createElement('div');
-            label.className = 'label';
-            label.id = 'label-' + edge.id; // 给每个标签一个独特的 ID
-            label.style.left = x + 'px';
-            label.style.top = y + 'px';
-            label.innerText = text;
-            document.body.appendChild(label);
-        }
-
-        function createMarker() {
-            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            marker.setAttribute('id', 'arrowhead');
-            marker.setAttribute('markerWidth', '10');
-            marker.setAttribute('markerHeight', '7');
-            marker.setAttribute('refX', '10');
-            marker.setAttribute('refY', '3.5');
-            marker.setAttribute('orient', 'auto');
-            path.setAttribute('d', 'M 0 0 L 10 3.5 L 0 7');
-            path.setAttribute('fill', 'black');
-            marker.appendChild(path);
-            defs.appendChild(marker);
-            svg.appendChild(defs);
-        }
-
-        let edges = [];
-
-        window.onload = async function() {
-            createMarker();
-
-            try {
-                const response = await axios.get('/api/glossary');
-                const data = response.data;
-                const nodes = data.filter(item => !item.id.startsWith('e'));
-                edges = data.filter(item => item.id.startsWith('e'));
-
-                nodes.forEach(nodeData => {
-                    const node = document.createElement('div');
-                    node.className = 'node';
-                    node.id = 'node-' + nodeData.id;
-                    node.style.left = nodeData.position.x + 'px';
-                    node.style.top = nodeData.position.y + 'px';
-                   
-                    const label = document.createTextNode(nodeData.data.label);
-                    node.appendChild(label);
-                    node.innerText = nodeData.data.label;
-                    
-                    const tooltip = document.createElement('span');
-                    tooltip.className = 'tooltip';
-                    tooltip.textContent = nodeData.data.note;
-                    node.appendChild(tooltip);
-                   
-                    document.body.appendChild(node);
-                    makeDraggable(node);
-                });
-
-                edges.forEach(edge => {
-                    const sourceNode = document.getElementById('node-' + edge.source);
-                    const targetNode = document.getElementById('node-' + edge.target);
-                    const x1 = sourceNode.offsetLeft + sourceNode.offsetWidth / 2;
-                    const y1 = sourceNode.offsetTop + sourceNode.offsetHeight / 2;
-                    const x2 = targetNode.offsetLeft + targetNode.offsetWidth / 2;
-                    const y2 = targetNode.offsetTop + targetNode.offsetHeight / 2;
-                    const midX = (x1 + x2) / 2;
-                    const midY = (y1 + y2) / 2;
-                    createArrow('arrow-' + edge.id, x1, y1, x2, y2);
-                    createLabel(edge, midX, midY, edge.label);
-                })
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        function makeDraggable(node) {
-    node.onmousedown = function(event) {
-        // 修正拖动代码...
-        event.preventDefault();
-        let shiftX = event.clientX - node.getBoundingClientRect().left;
-        let shiftY = event.clientY - node.getBoundingClientRect().top;
-
-        node.style.cursor = 'grabbing';
-
-        function moveAt(pageX, pageY) {
-            node.style.left = pageX - shiftX + 'px';
-            node.style.top = pageY - shiftY + 'px';
-            updateArrows(node);
-        }
-
-        function onMouseMove(event) {
-            moveAt(event.pageX, event.pageY);
-        }
-
-        // 绑定到document确保即使鼠标离开元素也能正常工作
-        document.addEventListener('mousemove', onMouseMove);
-
-        function onMouseUp() {
-            document.removeEventListener('mousemove', onMouseMove);
-            node.onmouseup = null;
-            node.style.cursor = 'grab';
-        }
-
-        // 使用addEventListener确保能够正确移除监听器
-        document.addEventListener('mouseup', onMouseUp, { once: true });
-    };
-
-    node.ondragstart = function() {
-        return false;
-    };
-}
-
-
-        function updateArrows(node) {
-            const nodeId = node.id.replace('node-', '');
-            edges.forEach(edge => {
-                if (edge.source === nodeId || edge.target === nodeId) {
-                    const sourceNode = document.getElementById('node-' + edge.source);
-                    const targetNode = document.getElementById('node-' + edge.target);
-                    const arrow = document.getElementById('arrow-' + edge.id);
-                    const label = document.getElementById('label-' + edge.id); // 获取标签
-                    if (arrow && label) {
-                        const x1 = sourceNode.offsetLeft + sourceNode.offsetWidth / 2;
-                        const y1 = sourceNode.offsetTop + sourceNode.offsetHeight / 2;
-                        const x2 = targetNode.offsetLeft + targetNode.offsetWidth / 2;
-                        const y2 = targetNode.offsetTop + targetNode.offsetHeight / 2;
-                        arrow.setAttribute('x1', x1);
-                        arrow.setAttribute('y1', y1);
-                        arrow.setAttribute('x2', x2);
-                        arrow.setAttribute('y2', y2);
-                        const midX = (x1 + x2) / 2;
-                        const midY = (y1 + y2) / 2;
-                        label.style.left = midX + 'px';
-                        label.style.top = midY + 'px';
-                    }
-                }
-            });
-        }
-    </script>
+    
 </body>
 </html>

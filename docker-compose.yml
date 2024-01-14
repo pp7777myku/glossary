@@ -1,0 +1,41 @@
+version: '3'
+services:
+  mysql:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    image: mysql:8.0.32
+    environment:
+      MYSQL_DATABASE: database_9030
+      MYSQL_ROOT_PASSWORD: Itmoitmo123
+    ports:
+      - "9030:3306"
+    networks:
+      - docker_network
+    volumes:
+      - ./db/grant.sql:/docker-entrypoint-initdb.d/grant.sql
+      - ./db/glossary_db.sql:/docker-entrypoint-initdb.d/glossary_db.sql
+    hostname: my-mysql
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9001"
+    networks:
+      - docker_network
+    hostname: api
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "9002:9002"
+    networks:
+      - docker_network
+    hostname: web
+
+networks:
+  docker_network:
