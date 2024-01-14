@@ -57,7 +57,7 @@ CREATE TABLE `nodes`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of nodes
+-- Records of nodes 
 -- ----------------------------
 INSERT INTO `nodes` VALUES ('1', 'default', '工业信息系统', 'term1 note...', 400, 100);
 INSERT INTO `nodes` VALUES ('10', 'default', '数据预测', NULL, 90, 650);
