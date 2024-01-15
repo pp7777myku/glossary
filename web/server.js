@@ -7,11 +7,9 @@ const port = 9002;
 app.use(express.static('public'));
 
 // API代理
-app.get('/api:9001/glossary', async (req, res) => {
+app.get('/api/glossary', async (req, res) => {
     try {
-        const response = 
-        
-        await axios.get('http://api:9001/glossary'); //if in docker net, here is api:9001/glossary
+        const response = await axios.get('http://api:9001/glossary'); //if in docker net, here is api:9001/glossary
         res.json(response.data);
     } catch (error) {
         console.error(error);
@@ -20,5 +18,5 @@ app.get('/api:9001/glossary', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/glossary`);
+    console.log(`Server running at http://localhost:${port}`);
 });
