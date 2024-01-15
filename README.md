@@ -1,7 +1,7 @@
 Ли Цзымин, P4109
 
 
-Web Page (Mind Map): http://34.125.116.121:9002
+Web Page (Mind Map & Glossary): http://34.125.116.121:9002
 
 
 Web API: http://34.125.116.121:9001/glossary
