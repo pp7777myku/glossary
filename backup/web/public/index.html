@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mind Map</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #4f8aa575;
+            margin: 0;
+            min-height: 100vh; /* 最小高度设置为视口高度 */
+            min-width: 100vw; /* 最小宽度设置为视口宽度 */
+            position: relative; /* 相对定位，以便于作者信息的绝对定位 */
+        }
+
+        .node {
+            position: absolute;
+            padding: 10px 15px;
+            border: 2px solid #2e86ab;
+            border-radius: 10px;
+            background-color: #f8f8fa;
+            cursor: grab;
+            user-select: none;
+            z-index: 100;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease;
+        }
+        .node:hover {
+            transform: scale(1.1);
+            z-index: 101;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .source-code-button {
+            position: fixed; /* 与作者信息标签一样固定位置 */
+            top: 10px; /* 与顶部的距离与作者信息相同 */
+            right: calc(10px + 200px); /* 使按钮位于作者信息的左侧 */
+            background-color: #4f8aa5; /* 为按钮选择一个合适的背景色 */
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 103; /* 确保z-index高于其他元素 */
+        }
+
+.source-code-button a {
+    color: white; /* 链接的文字颜色 */
+    text-decoration: none; /* 去掉下划线 */
+    font-size: 0.8em;
+}
+
+.author-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    color: #333;
+    font-size: 0.8em;
+    text-align: right;
+}
+
+.author-info p {
+    margin: 5px 0;
+}
+
+        .label {
+            position: absolute;
+            padding: 5px 10px;
+            border: 1px solid #666;
+            border-radius: 50%; /* 圆形边框 */
+            background-color: #fff;
+            text-align: center;
+            user-select: none;
+            z-index: 100;
+            transform: translate(-50%, -50%); /* 使标签居中于指定位置 */
+        }
+        .tooltip {
+        visibility: hidden;
+        position: absolute;
+        background-color: black;
+        color: white;
+        text-align: center;
+        padding: 5px 10px; /* 增加水平填充以提高可读性 */
+        border-radius: 6px;
+        z-index: 200;
+        opacity: 0;
+        transition: opacity 0.3s;
+        max-width: 200px; /* 设置最大宽度 */
+        word-wrap: break-word; /* 允许在单词内断行 */
+        white-space: normal; /* 重置白空间处理 */
+    }
+    .node:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+    .button-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 102;
+}
+
+.button {
+    margin-right: 10px;
+    padding: 5px 15px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* 移除超链接的下划线 */
+}
+.source-code-button {
+    position: fixed;
+    top: 10px;
+    right: calc(10px + 200px);
+    z-index: 103; 
+}
+    </style>
+</head>
+<body>
+    <svg width="100%" height="100%"></svg>
+    <div class="button-container">
+        <a href="glossary.html" class="button">Table View (Glossary)</a>
+        <a href="index.html" class="button">Mind Map View</a>
+    </div>
+    <div class="source-code-button">
+        <a href="https://github.com/pp7777myku/glossary" target="_blank" class="btn">Codes (on Github)</a>
+    </div> 
+    <div class="author-info">
+        <p>Автор: Ли Цзымин</p>
+        <p>Университет ИТМО</p>
+    </div>
+    <svg width="100%" height="100%"></svg>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="index.js"></script>
+
+    
+</body>
+</html>
