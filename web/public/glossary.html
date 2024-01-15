@@ -61,7 +61,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
             try {
-                const response = await axios.get('/api/glossary');
+                const response = await axios.get('/api:9001/glossary');
                 const data = response.data;
 
                 const tableBody = document.getElementById('glossary-table').getElementsByTagName('tbody')[0];
