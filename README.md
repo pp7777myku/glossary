@@ -11,4 +11,5 @@ MySQL： 34.125.116.121:3306
 ![JKOB$R }%F{6~{RO`A_{CDS](https://github.com/pp7777myku/glossary/assets/62941440/c76954c9-83df-49fa-800a-31c5450556a0)
 
 Блок схема системы：
-![Uploading image.png…]()
+![image](https://github.com/pp7777myku/glossary/assets/62941440/a0fd291b-2498-4684-ac55-598aa810c3d4)
+
