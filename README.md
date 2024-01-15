@@ -8,7 +8,8 @@ MySQL： 34.125.116.121:9030 (ID:root PW:Itmoitmo123)
 
 
 Как показано на рисунке, семантический граф нарисован с помощью SVG, а узлы можно перетаскивать с помощью мыши.
-![JKOB$R }%F{6~{RO`A_{CDS](https://github.com/pp7777myku/glossary/assets/62941440/c76954c9-83df-49fa-800a-31c5450556a0)
+![@)7F}~@D9URR TCSOP UX8D](https://github.com/pp7777myku/glossary/assets/62941440/154e6967-282d-4e1d-84ec-1319d0c120b8)
+
 
 Блок схема системы：
 
