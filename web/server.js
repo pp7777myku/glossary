@@ -9,7 +9,9 @@ app.use(express.static('public'));
 // API代理
 app.get('/api:9001/glossary', async (req, res) => {
     try {
-        const response = await axios.get('http://api:9001/glossary'); //if in docker net, here is api:9001/glossary
+        const response = 
+        
+        await axios.get('http://api:9001/glossary'); //if in docker net, here is api:9001/glossary
         res.json(response.data);
     } catch (error) {
         console.error(error);

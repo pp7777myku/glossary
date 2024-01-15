@@ -71,7 +71,7 @@ window.onload = async function() {
     createMarker();
 
     try {
-        const response = await axios.get('/api:9001/glossary');
+        const response = await axios.get('http://api:9001/glossary');
         const data = response.data;
         const nodes = data.filter(item => !item.id.startsWith('e'));
         edges = data.filter(item => item.id.startsWith('e'));
