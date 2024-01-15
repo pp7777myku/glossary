@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const app = express();
 const port = 9001;
 
-setTimeout(() => {
+
 //connect to database
 const db = mysql.createConnection({
   host     : 'my-mysql',
@@ -12,7 +12,6 @@ const db = mysql.createConnection({
   password : 'Itmoitmo123',
   database : 'database_9030'
 });
-
 
 db.connect(err => {
   if (err) {
@@ -75,5 +74,3 @@ app.get('/glossary', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/glossary`);
 });
-
-}, 60000); // 60 seconds delay
